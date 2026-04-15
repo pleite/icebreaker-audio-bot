@@ -4,8 +4,12 @@
  * Icebreaker Activity Module
  *
  * Pure business logic for the icebreaker — no Azure/Teams dependencies.
- * All game state, prompts, and scripts live here so they can be unit tested
+ * All game state and conversation history live here so they can be unit tested
  * independently of any cloud infrastructure.
+ *
+ * The fixed script methods (getIntroScript, getParticipantPrompt, …) are kept
+ * as fallbacks.  In normal operation, AiManager generates all spoken text and
+ * records it here via addToHistory() so the AI model always has full context.
  */
 
 // ---------------------------------------------------------------------------
@@ -111,6 +115,50 @@ class IcebreakerSession {
     this.phase = 'connecting';
     /** Track which "Would You Rather" question indices have been used */
     this._usedQuestionIndices = [];
+    /**
+     * Conversation history for the AI model.
+     * Format: [{ role: 'assistant'|'user', content: string }]
+     * 'assistant' entries = what the bot has said.
+     * 'user'      entries = what participants have said (prefixed with name).
+     */
+    this._conversationHistory = [];
+  }
+
+  // -------------------------------------------------------------------------
+  // Conversation history (used by AiManager for context-aware generation)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Append an entry to the conversation history.
+   * @param {'assistant'|'user'} role
+   * @param {string} content
+   */
+  addToHistory(role, content) {
+    this._conversationHistory.push({ role, content });
+  }
+
+  /**
+   * Record a participant's spoken response.  Adds a 'user' history entry so
+   * the AI knows what has already been said and can vary acknowledgements.
+   * @param {string} participantName
+   * @param {string} speech - Transcribed text from STT
+   */
+  recordParticipantSpeech(participantName, speech) {
+    if (speech) {
+      this._conversationHistory.push({
+        role: 'user',
+        content: `${participantName}: ${speech}`,
+      });
+    }
+  }
+
+  /**
+   * Return a copy of the conversation history (safe to pass to OpenAI).
+   * Capped at the most recent 20 messages to stay within token limits.
+   * @returns {Array<{role: string, content: string}>}
+   */
+  getConversationHistory() {
+    return this._conversationHistory.slice(-20);
   }
 
   // -------------------------------------------------------------------------
