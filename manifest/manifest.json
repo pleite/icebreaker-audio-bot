@@ -16,11 +16,11 @@
   },
   "name": {
     "short": "Icebreaker Bot",
-    "full": "Icebreaker Audio Bot"
+    "full": "Icebreaker Bot"
   },
   "description": {
-    "short": "AI-powered voice icebreaker for Teams meetings",
-    "full": "An intelligent bot that joins your Teams meetings as an audio participant and conducts engaging icebreaker activities — Two Truths and a Lie, Would You Rather, Fun Fact Round, and Speed Introductions — helping teams connect from the moment they meet."
+    "short": "AI-powered chat icebreaker for Teams meetings",
+    "full": "An intelligent bot that joins your Teams meeting chat and conducts engaging icebreaker activities — Two Truths and a Lie, Would You Rather, Fun Fact Round, and Speed Introductions — powered by GenAI and fully customisable instructions."
   },
   "accentColor": "#0078D4",
   "bots": [

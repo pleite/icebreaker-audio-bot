@@ -1,0 +1,14 @@
+services:
+  icebreaker-bot:
+    build: .
+    ports:
+      - "3978:3978"
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3978/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

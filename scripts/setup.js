@@ -172,7 +172,7 @@ function prompt(rl, question) {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  console.log('\n🚀  Icebreaker Audio Bot — Setup\n');
+  console.log('\n🚀  Icebreaker Bot — Setup\n');
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
