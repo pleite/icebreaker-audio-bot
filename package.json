@@ -1,0 +1,43 @@
+{
+  "name": "icebreaker-audio-bot",
+  "version": "1.0.0",
+  "description": "A Microsoft Teams audio bot that joins meetings and conducts icebreaker activities using voice",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest --forceExit",
+    "setup": "node scripts/setup.js"
+  },
+  "keywords": [
+    "teams",
+    "bot",
+    "icebreaker",
+    "audio",
+    "azure",
+    "copilot"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@azure/communication-call-automation": "^1.3.0",
+    "@azure/communication-common": "^2.3.1",
+    "botbuilder": "^4.22.3",
+    "dotenv": "^16.4.5",
+    "restify": "^11.1.0",
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

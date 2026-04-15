@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment — never commit real secrets
+.env
+
+# Build artefacts
+dist/
+build/
+
+# Generated manifest package (re-run `npm run setup` to recreate)
+manifest/manifest.zip
+manifest/color.png
+manifest/outline.png
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
