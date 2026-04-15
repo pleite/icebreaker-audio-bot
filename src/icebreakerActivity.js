@@ -95,18 +95,22 @@ function getRandomActivity() {
 // ---------------------------------------------------------------------------
 
 /**
- * Represents one active icebreaker session tied to an ACS call connection.
+ * Represents one active icebreaker session.
+ * Used for both chat mode (keyed by conversation ID) and
+ * audio mode (keyed by ACS call connection ID).
  *
  * Phases:
  *   connecting → intro → activity → wrapup → ended
  */
 class IcebreakerSession {
   /**
-   * @param {string} callConnectionId - The ACS call connection ID
+   * @param {string} sessionId  - Conversation ID (chat) or ACS call connection ID (audio)
    * @param {string|null} [activity] - Activity type (default: random)
    */
-  constructor(callConnectionId, activity = null) {
-    this.callConnectionId = callConnectionId;
+  constructor(sessionId, activity = null) {
+    /** Alias kept for backward-compat with callManager which reads callConnectionId */
+    this.callConnectionId = sessionId;
+    this.sessionId = sessionId;
     this.activity = activity && Object.values(ACTIVITIES).includes(activity)
       ? activity
       : getRandomActivity();
@@ -115,6 +119,8 @@ class IcebreakerSession {
     this.phase = 'connecting';
     /** Track which "Would You Rather" question indices have been used */
     this._usedQuestionIndices = [];
+    /** In chat mode: the participant ID the bot most recently prompted (for @mention UX) */
+    this._waitingForId = null;
     /**
      * Conversation history for the AI model.
      * Format: [{ role: 'assistant'|'user', content: string }]
@@ -159,6 +165,20 @@ class IcebreakerSession {
    */
   getConversationHistory() {
     return this._conversationHistory.slice(-20);
+  }
+
+  // -------------------------------------------------------------------------
+  // Computed properties
+  // -------------------------------------------------------------------------
+
+  /** Human-readable name of the current activity (used in AI prompts). */
+  get activityName() {
+    return ACTIVITY_NAMES[this.activity] || this.activity;
+  }
+
+  /** A random scripted acknowledgement phrase (used as AI fallback). */
+  getRandomAcknowledgement() {
+    return getRandomAcknowledgement();
   }
 
   // -------------------------------------------------------------------------
